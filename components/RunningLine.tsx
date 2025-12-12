@@ -1,88 +1,106 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useChangeOnResize } from "@/hooks/useChangeOnResize";
+import { motion, Variants } from "framer-motion";
+import { useRef, useState } from "react";
 
 interface RunningLineProps {
   children: React.ReactNode;
-  speed?: number;
-  reverse?: boolean;
+  speed?: number; // px per second
 }
 
-const RunningLine = ({
-  children,
-  speed = 35,
-  reverse = false,
-}: RunningLineProps) => {
+function RunningLine({ children, speed = 35 }: RunningLineProps) {
+  const [animationState, setAnimationState] = useState<
+    "start" | "pause" | "resume"
+  >("start");
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const [containerWidth, setContainerWidth] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [currentX, setCurrentX] = useState(0);
 
-  // Рассчитываем общее расстояние для анимации (ширина контента + контейнера)
-  const distance = contentWidth + containerWidth;
-  const duration = distance > 0 ? distance / speed : 0;
+  const startX = -contentWidth;
+  const finishX = containerWidth;
+  const totalDistance = containerWidth + contentWidth;
+  const absoluteDuration = totalDistance > 0 ? totalDistance / speed : 0;
 
-  // Рассчитываем начальное и конечное положение в зависимости от направления
-  const startX = reverse ? -contentWidth : containerWidth;
-  const endX = reverse ? containerWidth : -contentWidth;
+  const handleMouseEnter = () => {
+    if (contentRef.current && containerRef.current) {
+      const rectContent = contentRef.current.getBoundingClientRect();
+      const rectContainer = containerRef.current.getBoundingClientRect();
+      setCurrentX(rectContent.left - rectContainer.left);
+      setAnimationState("pause");
+    }
+  };
 
-  useEffect(() => {
-    const calculateWidths = () => {
-      const container = document.getElementById("running-line-container");
-      const content = document.getElementById("running-line-content");
-      if (container && content) {
-        setContainerWidth(container.offsetWidth);
-        setContentWidth(content.offsetWidth);
-      }
-    };
+  const handleMouseLeave = () => {
+    const remainingDistance = finishX - currentX;
+    const newDuration = remainingDistance > 0 ? remainingDistance / speed : 0;
+    setDuration(newDuration);
+    setAnimationState("resume");
+  };
 
-    calculateWidths();
-    window.addEventListener("resize", calculateWidths);
-    return () => window.removeEventListener("resize", calculateWidths);
-  }, []); // Запускаем только при монтировании
+  const handleContainerWidthChange = (newWidth: number) => {
+    setContainerWidth(newWidth);
+  };
 
-  // Обработчики наведения
-  const handleMouseEnter = () => setIsPlaying(false);
-  const handleMouseLeave = () => setIsPlaying(true);
+  const handleContentWidthChange = (newWidth: number) => {
+    setContentWidth(newWidth);
+  };
 
-  // Рендерим без анимации пока не получены размеры
-  if (containerWidth === 0 || contentWidth === 0) {
-    return (
-      <div
-        id="running-line-container"
-        className="overflow-hidden whitespace-nowrap"
-      >
-        <div id="running-line-content" className="inline-block">
-          {children}
-        </div>
-      </div>
-    );
-  }
+  useChangeOnResize(containerRef, handleContainerWidthChange);
+  useChangeOnResize(contentRef, handleContentWidthChange);
+
+  const [duration, setDuration] = useState(absoluteDuration);
+
+  const variants: Variants = {
+    start: {
+      x: [startX, finishX],
+      transition: {
+        duration: absoluteDuration,
+        repeat: Infinity,
+        ease: "linear",
+      },
+    },
+    resume: {
+      x: [currentX, finishX],
+      transition: {
+        duration: duration,
+        ease: "linear",
+        onComplete: () => {
+          setAnimationState("start");
+        },
+      },
+    },
+    pause: {
+      x: currentX,
+      transition: {
+        duration: 0,
+      },
+    },
+  };
 
   return (
     <div
-      id="running-line-container"
-      className="overflow-hidden whitespace-nowrap"
-      aria-hidden="true"
+      ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      className="overflow-hidden whitespace-nowrap"
+      aria-hidden="true"
     >
       <motion.div
-        id="running-line-content"
+        ref={contentRef}
         className="inline-block"
-        initial={{ x: startX }}
-        animate={{ x: endX }}
-        transition={{
-          duration,
-          ease: "linear",
-          repeat: isPlaying ? Infinity : 0,
-          repeatType: "loop",
-        }}
+        variants={variants}
+        animate={animationState}
+        initial={false}
       >
         {children}
       </motion.div>
     </div>
   );
-};
+}
 
 export default RunningLine;
