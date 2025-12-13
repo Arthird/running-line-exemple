@@ -2,8 +2,6 @@
 
 **Running Line Example** — a demonstration of a classic "marquee" or ticker animation as seen on digital displays, news websites, stock tickers, and more.
 
-This project combines high performance, developer-friendly tooling, and a clean aesthetic, making it an excellent starting point for interactive UI solutions.
-
 ---
 
 ## 🛠️ Technologies Used
@@ -41,11 +39,16 @@ I chose it because I plan to continue working with React and Next.js in the futu
 - Complex animations with minimal code,
 - Excellent performance.
 
-In this project, I’m only using a small part of its capabilities—specifically, to create a smooth scrolling animation.
+In this project, it powers the core animation and enables dynamic component behavior based on user interaction and configuration.
 
 🔗 [Official Framer Motion Website](https://www.framer.com/motion/)
 
 ---
+
+## ⚙️ Project Structure
+
+- `RunningLine.tsx` component
+- `useChangeOnResize.ts` hook, required for the component to function properly
 
 ## ▶️ Running the Project
 
@@ -65,13 +68,13 @@ After starting the development server, open your browser to:
 
 ---
 
-🌟 **Running Line Example** is simply a demonstration of an animation I intend to reuse in future projects.
+🌟 **Running Line Example** is not just a demo—it’s a fully functional solution that can be easily integrated into other projects with minimal effort.
+
+---
 
 # 🏃‍♂️ Running Line Example
 
 **Running Line Example** — демонстрация бегущей строки как на цифровых инсталляциях, новостных сайтах, тикерах и т.д.
-
-Этот проект сочетает в себе высокую производительность, удобство разработки и эстетичный внешний вид, что делает его отличной отправной точкой для интерактивных UI-решений.
 
 ---
 
@@ -87,7 +90,7 @@ After starting the development server, open your browser to:
 - оптимизированной сборки с Turbopack,
 - и многого другого.
 
-но я его использовал поотму что планирую и дальше работать с React и Next.js
+но я его использовал, потому что планирую и дальше работать с React и Next.js
 
 🔗 [Официальный сайт Next.js](https://nextjs.org)
 
@@ -110,11 +113,16 @@ After starting the development server, open your browser to:
 - сложные анимации с минимальным кодом,
 - отличную производительность.
 
-но я использую лишь малую часть его функционала - создание плавной анимации
+В этом проекте она обеспечивает основную анимацию, изменение состояния компонента в зависимости от настроек компонента и действий пользователя.
 
 🔗 [Официальный сайт Framer Motion](https://www.framer.com/motion/)
 
 ---
+
+## ⚙️ Составляющие проекта
+
+- компонент RunningLine.tsx
+- хук useChangeOnResize.ts, необходимый для работы компонента
 
 ## ▶️ Запуск проекта
 
@@ -134,4 +142,4 @@ bun dev
 
 ---
 
-🌟 **Running Line Example** - просто демонстрация анимации, которую я буду потом использовать в своих проектах
+🌟 **Running Line Example** - не только демонстрация анимации, но и реально работающее решение, которое без особых проблем можно использовать в других проектах.
