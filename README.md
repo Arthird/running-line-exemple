@@ -64,7 +64,7 @@ bun dev
 
 After starting the development server, open your browser to:
 
-👉 [http://localhost:3000](http://localhost:3000)
+👉 [http://localhost:3000/running-line-exemple/](http://localhost:3000/running-line-exemple/)
 
 ---
 
@@ -121,8 +121,8 @@ After starting the development server, open your browser to:
 
 ## ⚙️ Составляющие проекта
 
-- компонент RunningLine.tsx
-- хук useChangeOnResize.ts, необходимый для работы компонента
+- компонент `RunningLine.tsx`
+- хук `useChangeOnResize.ts`, необходимый для работы компонента
 
 ## ▶️ Запуск проекта
 
@@ -138,7 +138,7 @@ bun dev
 
 После запуска откройте в браузере:
 
-👉 [http://localhost:3000](http://localhost:3000)
+👉 [http://localhost:3000/running-line-exemple/](http://localhost:3000/running-line-exemple/)
 
 ---
 
